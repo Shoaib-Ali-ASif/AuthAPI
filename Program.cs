@@ -8,6 +8,17 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+       policy =>
+       {
+           policy.WithOrigins("https://localhost:7075")
+                 .AllowAnyHeader()
+                 .AllowAnyMethod();
+       });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -65,6 +76,7 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "AtuhAPI");
     });
 }
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 
